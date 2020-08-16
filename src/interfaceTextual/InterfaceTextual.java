@@ -1,54 +1,30 @@
 package interfaceTextual;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import utils.DataIO;
+import utils.ActionsEnum;
+import manager.UnitManager;
 
 public class InterfaceTextual {
 
 	private boolean iniciar;
+	private Object[] actionDone;
 
 	public InterfaceTextual() {
 		try {
 			Object[] inputData;
 			do {
-				inputData = getDataFromInput(readLine());
-				printActionDone(inputData);
-			} while (!inputData[0].equals("finalizar"));
+				inputData = getDataFromInput(DataIO.readConsoleLine());
+				getActionDoneAsString();
+				setActionDone(null);
+			} while (!inputData[0].equals(ActionsEnum.finalizar.name()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private String printActionDone(Object[] data) {
-		String str = "";
-		if (!isInitialized() && !data[0].equals("finalizar")) {
-			return str;
-		}
-		
-		for (int i = 0; i < data.length; i++) {
-			if (!data[i].equals("-1") && !data[i].equals("")) {
-				str += data[i] + " ";
-			}
-		}
-		System.out.println(str);
-		return str;
-	}
-
-	public String readLine() {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		String line = "";
-		try {
-			line = reader.readLine();
-			return line;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return line;
-	}
-
 	/*
-	 * Returns an array with the data of what was done: [comando, bits, arquivo, dado, endereco]
+	 * Returns an array with the data of what was done: [comando, bits, arquivo,
+	 * dado, endereco]
 	 */
 	public Object[] getDataFromInput(String line) {
 
@@ -60,8 +36,8 @@ public class InterfaceTextual {
 
 		if (!isInitialized()) {
 
-			if (userCommand.equals("iniciar")) {
-				setInitialized(true);
+			if (userCommand.equals(ActionsEnum.iniciar.name())) {
+				doIniciar();
 			}
 			return state;
 		}
@@ -69,23 +45,28 @@ public class InterfaceTextual {
 		switch (userCommand) {
 
 		case "fis":
-			state[1] = Integer.parseInt(input[1]);
-			doFis(state[1]);
+			if (input.length == 2) {
+				state[1] = Integer.parseInt(input[1]);
+				doFis((int) state[1]);
+			}
 			break;
 
 		case "pagina":
-			state[1] = Integer.parseInt(input[1]);
-			doPagina(state[1]);
+			if (input.length == 2) {
+				state[1] = input[1];
+				doPagina((int) state[1]);
+			}
 			break;
 
 		case "vir":
-			state[1] = Integer.parseInt(input[1]);
-			state[2] = input[2];
-			doVir(state[1], state[2]);
+			if (input.length == 3) {
+				state[1] = input[1];
+				state[2] = input[2];
+				doVir((int) state[1], (String) state[2]);
+			}
 			break;
 
 		case "finalizar":
-			setInitialized(false);
 			doFinalizar();
 			break;
 
@@ -93,50 +74,69 @@ public class InterfaceTextual {
 		case "ler_w":
 		case "ler_l":
 		case "ler_q":
-			state[4] = input[1];
-			doLer(state[4], userCommand);
+			if (input.length == 2) {
+				state[4] = input[1];
+				doLer((String) state[4], userCommand);
+			}
 			break;
 
 		case "escrever_b":
 		case "escrever_w":
 		case "escrever_l":
 		case "escrever_q":
-			state[3] = input[1];
-			state[4] = input[2];
-			doEscrever(state[4], userCommand);
+			if (input.length == 3) {
+				state[3] = input[1];
+				state[4] = input[2];
+				doEscrever((String) state[4], userCommand);
+			}
 			break;
 		}
 
 		return state;
 	}
 
-	private void doEscrever(Object object, String userCommand) {
-		// TODO Auto-generated method stub
+	private void doIniciar() {
+		setInitialized(true);
+		setActionDone(new Object[] {ActionsEnum.iniciar.name()});
 		
 	}
 
-	private void doLer(Object object, String userCommand) {
-		// TODO Auto-generated method stub
-		
+	public boolean opcaoValida(String input) {
+		for (ActionsEnum opcao : ActionsEnum.values() ){
+			if (opcao.name().equals(input)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void doEscrever(String dado, String userCommand) {
+		setActionDone(new Object[] {userCommand, dado});
+
+	}
+
+	private void doLer(String endereco, String userCommand) {
+		setActionDone(new Object[] {userCommand, endereco});
+
 	}
 
 	private void doFinalizar() {
-		// TODO Auto-generated method stub
-		
+		setActionDone(new Object[] {ActionsEnum.finalizar.name()});
+		setInitialized(false);
 	}
 
-	private void doVir(Object object, Object object2) {
-		// TODO Auto-generated method stub
-		
+	private void doVir(int bits, String arquivo) {
+		setActionDone(new Object[] {ActionsEnum.vir.name(), bits, arquivo});
+
 	}
 
-	private void doPagina(Object object) {
-		// TODO Auto-generated method stub
-		
+	private void doPagina(int bits) {
+		setActionDone(new Object[] {ActionsEnum.pagina.name(), bits});
+
 	}
 
-	private void doFis(Object object) {
-		// TODO Auto-generated method stub
+	private void doFis(int bits) {
+		setActionDone(new Object[] {ActionsEnum.fis.name(), bits});
 
 	}
 
@@ -146,6 +146,30 @@ public class InterfaceTextual {
 
 	private void setInitialized(boolean iniciar) {
 		this.iniciar = iniciar;
+	}
+
+	public Object[] getActionDone() {
+		return actionDone;
+	}
+	
+	public String getActionDoneAsString() {
+		
+		if (actionDone == null) {
+			return "";
+		}
+		
+		String actionData = "";
+		for (int i = 0; i < actionDone.length; i ++) {
+			actionData += actionDone[i] + " ";
+		}
+		if (!actionData.equals("")) {
+			System.out.println(actionData);
+		}
+		return actionData;
+	}
+
+	public void setActionDone(Object[] objects) {
+		this.actionDone = objects;
 	}
 
 }
