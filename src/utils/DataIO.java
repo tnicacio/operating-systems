@@ -17,5 +17,23 @@ public class DataIO {
 		}
 		return line;
 	}
+	
+	public static String[] readAndTreatConsoleLine() {
+		return readConsoleLine().trim().split("[,|,\s]+");
+	}
+	
+	public static void printAsStringLine(String[] text) {
+		if (text == null) {
+			return;
+		}
+
+		String str = "";
+		for (int i = 0; i < text.length; i++) {
+			str += text[i] + " ";
+		}
+		if (!str.equals("")) {
+			System.out.println(str);
+		}
+	}
 
 }
