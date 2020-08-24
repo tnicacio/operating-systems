@@ -1,6 +1,6 @@
 package utils;
 
-import manager.UnitManager;
+import static manager.UnitManager.*;
 
 public enum ActionsEnum {
 
@@ -8,7 +8,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 2) {
-				return UnitManager.fis(Integer.parseInt(input[1]));
+				return fis(Integer.parseInt(input[1]));
 			}
 			return nope;
 		}
@@ -17,7 +17,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 2) {
-				return UnitManager.pagina(Integer.parseInt(input[1]));
+				return pagina(Integer.parseInt(input[1]));
 			}
 			return nope;
 		}
@@ -26,7 +26,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 3) {
-				return UnitManager.vir(Integer.parseInt(input[1]), input[2]);
+				return vir(Integer.parseInt(input[1]), input[2]);
 			}
 			return nope;
 		}
@@ -35,7 +35,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length > 0) {
-				return UnitManager.finalizar();
+				return finalizar();
 			}
 			return nope;
 		}
@@ -44,7 +44,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 2) {
-				return UnitManager.ler_b(input[1]);
+				return ler_b(input[1]);
 			}
 			return nope;
 		}
@@ -53,7 +53,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 2) {
-				return UnitManager.ler_w(input[1]);
+				return ler_w(input[1]);
 			}
 			return nope;
 		}
@@ -62,7 +62,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 2) {
-				return UnitManager.ler_l(input[1]);
+				return ler_l(input[1]);
 			}
 			return nope;
 		}
@@ -71,7 +71,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 2) {
-				return UnitManager.ler_q(input[1]);
+				return ler_q(input[1]);
 			}
 			return nope;
 		}
@@ -80,7 +80,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 3) {
-				return UnitManager.escrever_b(input[1], input[2]);
+				return escrever_b(input[1], input[2]);
 			}
 			return nope;
 		}
@@ -89,7 +89,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 3) {
-				return UnitManager.escrever_w(input[1], input[2]);
+				return escrever_w(input[1], input[2]);
 			}
 			return nope;
 		}
@@ -98,7 +98,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 3) {
-				return UnitManager.escrever_l(input[1], input[2]);
+				return escrever_l(input[1], input[2]);
 			}
 			return nope;
 		}
@@ -107,7 +107,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length == 3) {
-				return UnitManager.escrever_q(input[1], input[2]);
+				return escrever_q(input[1], input[2]);
 			}
 			return nope;
 		}
@@ -116,7 +116,7 @@ public enum ActionsEnum {
 		@Override
 		public String doAction(String[] input) {
 			if (input.length > 0) {
-				return UnitManager.iniciar();
+				return iniciar();
 			}
 			return nope;
 		}
